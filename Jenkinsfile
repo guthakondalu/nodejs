@@ -32,7 +32,7 @@ pipeline {
     stage('Commit Code Coverage Metrics to GIT') {
       steps {
         echo "${env.GIT_CREDENTIAL_ID}"
-        withCredentials([usernamePassword(credentialsId: 'e19ff800-0e8b-4b9b-8a15-8495d818cd5d', passwordVariable: 'Seven@93930', usernameVariable: 'guthakondalu')]) {
+        withCredentials([usernamePassword(credentialsId: 'e19ff800-0e8b-4b9b-8a15-8495d818cd5d', passwordVariable: 'password', usernameVariable: 'username')]) {
             script {
               env.encodedPass=URLEncoder.encode(PASS, "UTF-8")
             }
@@ -41,6 +41,7 @@ pipeline {
             git add -f coverage
             git commit -m "Code coverage metrics added from build -  $BUILD_NUMBER"
             git push origin master
+            git push http://$username:$password@github.com/nodejs.git --LL
           """
         } 
       }
