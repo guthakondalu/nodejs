@@ -1,15 +1,9 @@
 pipeline {
   agent any
 
-  options {
-    timestamps()
-    ansiColor('xterm')
-    buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '10'))
-  }
-
   environment {
        HOME="$WORKSPACE"
-    }
+  }
   
   stages {
         
@@ -25,10 +19,8 @@ pipeline {
                     
                 """ 
 
-                git credentialsId: 'e19ff800-0e8b-4b9b-8a15-8495d818cd5d', url: 'https://github.com/guthakondalu/nodejs.git'     
-      }
-
-      
+          git credentialsId: 'e19ff800-0e8b-4b9b-8a15-8495d818cd5d', url: 'https://github.com/guthakondalu/nodejs.git'     
+      }  
     }
      
     stage('Test') {
@@ -39,8 +31,11 @@ pipeline {
     
     stage('Commit Code Coverage Metrics to GIT') {
       steps {
-        sh "git add -f coverage"
-        sh "git commit -m 'Code coverage metrics added from build - ' $BUILD_NUMBER"
+         sh """
+            git add -f coverage
+            git commit -m "Code coverage metrics added from build -  $BUILD_NUMBER"
+            git push origin master
+        """
       }
     }
   }
@@ -48,6 +43,7 @@ pipeline {
 post {
         success {
                	cleanWs()
+                echo 'Successfully completed the Build'
             }
         
         failure {
