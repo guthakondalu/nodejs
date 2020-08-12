@@ -1,25 +1,31 @@
 pipeline {
   agent any
+
+  options {
+    timestamps()
+    ansiColor('xterm')
+    buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '10'))
+  }
+  environment {
+       HOME="$WORKSPACE"
+    }
   
   stages {
         
-    stage('Git') {
+    stage('Build') {
       steps {
-          sh 'node -v'
-          echo "${WORKSPACE}"
-          
-        git 'https://github.com/guthakondalu/nodejs.git'
+          sh """
+                    echo "Tool versions"
+                    node --version
+                    npm --version
+                    
+                    echo HOME: \$HOME
+                    npm install
+                    
+                """      
       }
     }
      
-    stage('Build') {
-      steps {
-        sh "npm install"
-        
-      }
-    }  
-    
-            
     stage('Test') {
       steps {
         sh "npm test"
@@ -33,4 +39,17 @@ pipeline {
       }
     }
   }
+
+post {
+        success {
+               	cleanWs()
+            }
+        }
+        failure {
+            echo 'Triggering email'
+           
+        }
+    }
+
+
 }
