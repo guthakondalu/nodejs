@@ -13,7 +13,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "nyc --reporter=text mocha",
+    "test": "nyc --reporter=html mocha",
     "test-only": "mocha -c --require test/setup.js --recursive \"test/**/*.spec.js\"",
     "test-app": "node bin/nodejs-dashboard.js -- node test/app/index.js",
     "coverage": "nyc mocha -- -c --recursive --require test/setup.js \"test/**/*.spec.js\"",
