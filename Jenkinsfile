@@ -6,6 +6,7 @@ pipeline {
     ansiColor('xterm')
     buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '10'))
   }
+
   environment {
        HOME="$WORKSPACE"
     }
@@ -24,6 +25,8 @@ pipeline {
                     
                 """      
       }
+
+      sh "git clone https://github.com/guthakondalu/nodejs.git/"
     }
      
     stage('Test') {
@@ -35,7 +38,7 @@ pipeline {
     stage('Commit Code Coverage Metrics to GIT') {
       steps {
         sh "git add -f coverage"
-        sh "git commit -m 'Code coverage metrics added from buil' $BUILD_NUMBER"
+        sh "git commit -m 'Code coverage metrics added from build - ' $BUILD_NUMBER"
       }
     }
   }
