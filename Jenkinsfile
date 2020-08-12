@@ -31,17 +31,17 @@ pipeline {
     
     stage('Commit Code Coverage Metrics to GIT') {
       steps {
-
-        withCredentials([usernamePassword(credentialsId: env.GIT_CREDENTIAL_ID, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-          script {
-            env.encodedPass=URLEncoder.encode(PASS, "UTF-8")
-          }
+        echo "${env.GIT_CREDENTIAL_ID}"
+        withCredentials([usernamePassword(credentialsId: 'e19ff800-0e8b-4b9b-8a15-8495d818cd5d', passwordVariable: 'Seven@93930', usernameVariable: 'guthakondalu')]) {
+            script {
+              env.encodedPass=URLEncoder.encode(PASS, "UTF-8")
+            }
 
          sh """
             git add -f coverage
             git commit -m "Code coverage metrics added from build -  $BUILD_NUMBER"
             git push origin master
-        """
+          """
         } 
       }
     }
