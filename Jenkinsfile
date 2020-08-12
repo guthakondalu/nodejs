@@ -23,10 +23,12 @@ pipeline {
                     echo HOME: \$HOME
                     npm install
                     
-                """      
+                """ 
+
+                git credentialsId: 'e19ff800-0e8b-4b9b-8a15-8495d818cd5d', url: 'https://github.com/guthakondalu/nodejs.git'     
       }
 
-      git branch: 'release', credentialsId: 'e19ff800-0e8b-4b9b-8a15-8495d818cd5d', url: 'https://github.com/guthakondalu/nodejs.git'
+      
     }
      
     stage('Test') {
@@ -47,7 +49,7 @@ post {
         success {
                	cleanWs()
             }
-        }
+        
         failure {
             echo 'Triggering email'
            
